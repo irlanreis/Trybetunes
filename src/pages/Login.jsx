@@ -42,7 +42,7 @@ class Login extends Component {
     const { isButtonDisabled, name, isLoading } = this.state;
     return (
       <div data-testid="page-login">
-        { isLoading ? <p>Carregando...</p> : (
+        { isLoading ? <h1>Carregando...</h1> : (
           <div>
             <label htmlFor="input-name">
               <input
