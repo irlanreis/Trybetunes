@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import '../styles/CardMusic.css';
 import { addSong } from '../services/favoriteSongsAPI';
 import Loading from './Loading';
 
