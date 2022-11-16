@@ -11,8 +11,8 @@ class MusicCard extends Component {
 
   componentDidMount() {
     const { saveSong, trackId } = this.props;
-    const receiveBool = saveSong.some((musicSaved) => musicSaved.trackId === trackId);
-    if (receiveBool) {
+    const receiveMusic = saveSong.some((musicSaved) => musicSaved.trackId === trackId);
+    if (receiveMusic) {
       this.setState({
         isChecked: true,
       });

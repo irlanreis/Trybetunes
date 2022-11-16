@@ -25,7 +25,6 @@ class Album extends Component {
 
   render() {
     const { album, song, saveSong } = this.state;
-    console.log(song);
     return (
       <div className="container">
         <Header />
@@ -34,12 +33,12 @@ class Album extends Component {
             song.map((music) => (
               <MusicCard
                 song={ music }
+                saveSong={ saveSong }
                 image={ music.artworkUrl100 }
                 trackName={ music.trackName }
                 previewUrl={ music.previewUrl }
                 trackId={ music.trackId }
                 key={ music.trackId }
-                saveSong={ saveSong }
               />
             ))
           }
