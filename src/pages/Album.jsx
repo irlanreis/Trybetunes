@@ -3,42 +3,48 @@ import PropTypes from 'prop-types';
 import Header from '../components/Header';
 import getMusics from '../services/musicsAPI';
 import MusicCard from '../components/MusicCard';
+import { getFavoriteSongs } from '../services/favoriteSongsAPI';
 
 class Album extends Component {
   state = {
     album: {},
     song: [],
+    saveSong: [],
   };
 
   async componentDidMount() {
     const { match: { params: { id } } } = this.props;
     const [album, ...song] = await getMusics(id);
-    console.log(album);
+    const allFavoriteMusic = await getFavoriteSongs();
     this.setState({
       album,
       song,
+      saveSong: allFavoriteMusic,
     });
   }
 
   render() {
-    const { album, song } = this.state;
+    const { album, song, saveSong } = this.state;
+    console.log(song);
     return (
       <div className="container">
         <Header />
         <section data-testid="page-album">
-          <h2 data-testid="album-name">{ album.collectionName }</h2>
-          <h3 data-testid="artist-name">{ album.artistName }</h3>
           {
             song.map((music) => (
               <MusicCard
                 song={ music }
+                image={ music.artworkUrl100 }
                 trackName={ music.trackName }
                 previewUrl={ music.previewUrl }
                 trackId={ music.trackId }
                 key={ music.trackId }
+                saveSong={ saveSong }
               />
             ))
           }
+          <h2 data-testid="album-name">{ album.collectionName }</h2>
+          <h3 data-testid="artist-name">{ album.artistName }</h3>
         </section>
       </div>
     );
@@ -46,8 +52,8 @@ class Album extends Component {
 }
 
 Album.propTypes = {
-  match: PropTypes.shape({
-    params: PropTypes.shape({
+  match: PropTypes.oneOfType({
+    params: PropTypes.oneOfType({
       id: PropTypes.number,
     }),
   }).isRequired,

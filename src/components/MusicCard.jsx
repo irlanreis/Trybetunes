@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import { addSong } from '../services/favoriteSongsAPI';
+import { addSong, removeSong } from '../services/favoriteSongsAPI';
 import Loading from './Loading';
 
 class MusicCard extends Component {
@@ -9,43 +9,55 @@ class MusicCard extends Component {
     isLoanding: false,
   };
 
+  componentDidMount() {
+    const { saveSong, trackId } = this.props;
+    const receiveBool = saveSong.some((musicSaved) => musicSaved.trackId === trackId);
+    if (receiveBool) {
+      this.setState({
+        isChecked: true,
+      });
+    } else {
+      this.setState({
+        isChecked: false,
+      });
+    }
+  }
+
   handleChange = async ({ target }) => {
     const { checked } = target;
     const { song } = this.props;
-
     this.setState({
       isLoanding: true,
     });
-
     await addSong(song);
-
     this.setState({
       isLoanding: false,
     });
-
     if (checked) {
       this.setState({
         isChecked: checked,
       });
+    } else {
+      this.setState({
+        isChecked: checked,
+      });
+      await removeSong(song);
     }
-
-    this.setState({
-      isChecked: checked,
-    });
   };
 
   render() {
-    const { trackId, trackName, previewUrl } = this.props;
+    const { trackId, trackName, previewUrl, image } = this.props;
     const { isChecked, isLoanding } = this.state;
 
     return (
       <>
-        { isLoanding && <Loading /> }
+        {isLoanding && <Loading />}
         <div
           className="container-card-music"
         >
           <div>
-            <span>{ trackName }</span>
+            <img src={ image } alt="imagem-album" />
+            <span>{trackName}</span>
           </div>
           <audio
             data-testid="audio-component"
@@ -78,6 +90,8 @@ MusicCard.propTypes = {
   trackId: PropTypes.number.isRequired,
   trackName: PropTypes.string.isRequired,
   previewUrl: PropTypes.string.isRequired,
+  image: PropTypes.string.isRequired,
+  saveSong: PropTypes.arrayOf.isRequired,
 };
 
 export default MusicCard;
